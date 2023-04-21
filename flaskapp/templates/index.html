@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block content %}
+
+        <p> A simple dashboard for understanding the relationship between geospatial variables (UV index, rain, population density, rural facilities, land surface temperature) and health outcomes in Rajasthan. </p>
+        <p> Created by students in Harvard's "Machine Learning For Social Good" class in partnership with Khushi Baby </p>
+
+        <a href="/mgwr"> MGWR Model and Analysis </a> <br/>
+        <a href="/randomforest"> Random Forest Model and Analysis </a> <br/>
+        <a href="/ridgeregression"> Ridge Regression Model and Analysis </a> <br/>
+        <a href="/lassoregression"> Lasso Regression Model and Analysis </a> <br/>
+        <a href="/multiplelinearregression"> Multiple Linear Regression Model and Analysis </a> <br/>
+        {% endblock %}
+
+        <!-- <form method = "POST" enctype="multipart/form-data" action = "/mgwr">   
+          <input type="file" type="submit" value="Upload" name="file" accept=".csv">
+	      <input type = "submit" value="MGWR Model"> 
+        </form>
+        <p style="color:blue;">Choose csv file to upload</p>
+        
+        <form method = "POST" enctype="multipart/form-data" action = "/randomforest">   
+          <input type="file" type="submit" value="Upload" name="file" accept=".csv">
+	      <input type = "submit" value="Random Forest Model"> 
+        </form>
+        <p style="color:blue;">Choose csv file to upload</p> -->
+
+        <form method = "POST" enctype="multipart/form-data" action = "/multiplelinearregression">   
+            <input type="file" type="submit" value="Upload" name="file" accept=".csv">
+            <input type = "submit" value="Multiple Linear Regression Model"> 
+          </form>
+          <p style="color:blue;">Choose csv file to upload</p>
+
+        <form method = "POST" enctype="multipart/form-data" action = "/ridgeregression">   
+            <input type="file" type="submit" value="Upload" name="file" accept=".csv">
+            <input type = "submit" value="Ridge Regression Model"> 
+        </form>
+        <p style="color:blue;">Choose csv file to upload</p>
+
+        <form method = "POST" enctype="multipart/form-data" action = "/lassoregression">   
+            <input type="file" type="submit" value="Upload" name="file" accept=".csv">
+            <input type = "submit" value="Lasso Regression Model"> 
+        </form>
+        <p style="color:blue;">Choose csv file to upload</p>
+
+
+	<!--<form method = "POST" action = "/decisiontree">   
+            <input type = "submit" value="Decision Tree Model"> 
+        </form>
+
+        <form method = "POST" action = "/mgwr">   
+            <input type = "submit" value="MGWR Model"> 
+        </form>-->
+
+        

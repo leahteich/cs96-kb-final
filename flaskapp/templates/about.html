@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <header>
+        <h1>About Our Project</h1>
+    </header>
+    <main>
+        <section id="team">
+            <h2>Our Team</h2>
+            <p>
+                Our project's Teaching Fellow is Lauren Cooke. The team consists of five members: Leo Shao, Leah Teichholtz, Cat Huang, Catherine Cui, and Diana Yue.
+                <ul>
+                    <li>Leo is a senior studying Applied Math and Economics and minoring in Computer Science.</li>
+                    <li>Leah is a junior studying Computer Science.</li>
+                    <li>Cat Huang is a junior studying CS and Stats.</li>
+                    <li>Catherine Cui is a junior studying CS.</li>
+                    <li>Diana is a junior studying CS and Philosophy.</li>
+                </ul>
+            </p>
+        </section>
+
+        <section id="client">
+            <h2>Our Client: Khushi Baby</h2>
+            <p>
+                Our client, Khushi Baby, is a nonprofit based in Rajasthan, India using geospatial predictors to assess health outcomes in Rajasthan. Khushi Baby is a public health non-profit working as the digital health solutions provider to the Government of Rajasthan's Department of Health. Their digital health platform is used by over 60,000 community health workers at the last mile to follow up on the primary health care for over 24M beneficiaries. Their vision is to leverage data and digital health solutions to improve community health outcomes.
+            </p>
+        </section>
+
+        <section id="course">
+            <h2>Course: CS96 at Harvard</h2>
+            <p>
+                This project was part of the CS96 course at Harvard, which is System Design Projects: Machine Learning for Social Impact. The tool developed as part of this project may be used by over 250 health officials across the state of Rajasthan to better understand local predictors of disease burden and design targeted interventions.
+            </p>
+        </section>
+
+        <section id="project-details">
+            <h2>Project Details</h2>
+            <p>
+                Our goal is to build an extension to Khushi Baby's dashboard to predict the probability of public health outcomes using spatial predictors/covariates. The objective of this research study is to use a spatial MGWR (Multiscale Geographically Weighted Regression) approach and other models such as random forests to identify potential predictors of child malnutrition, specifically underweight, stunting, and wasting, in the subdistricts of Rajasthan. The study will utilize subdistrict-level data and focus on exploring the relationship between various environmental factors on different forms of child malnutrition. The ultimate goal of the study is to provide insights and recommendations for policymakers and healthcare professionals to address child malnutrition in the area of study.
+           </p>
+           <p>
+            Models will be performed for the following child health outcomes:
+            <ol>
+                <li>Percentage of underweight</li>
+                <li>Percentage of stunting</li>
+                <li>Percentage of wasting</li>
+                <li>Average percentage of underweight, stunting, and wasting</li>
+            </ol>
+        </p>
+        <p>
+            The Minimal Viable Product (MVP) features of our project include:
+            <ul>
+                <li>Scraping the web for publicly available GIS data on spatial predictors including rainfall, population density, light index, etc.</li>
+                <li>Developing a machine learning model that predicts district-level outcomes from 2021 in the <a href="https://geographicinsights.iq.harvard.edu/nfhs-tracker-districts">NFHS5 policy tracker</a>.</li>
+                <li>Developing a user interface in which the user can upload a table or geodataframe for a new health outcome and run a machine learning model to identify updated spatial predictors of the user-specified health outcome.</li>
+            </ul>
+        </p>
+    </section>
+</main>
+{% endblock %}

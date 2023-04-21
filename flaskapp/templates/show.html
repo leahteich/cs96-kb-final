@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/style.css">
+
+  </head>
+  <body>
+    <h1> Output File </h1>
+    <p> r^2 value is {{ r2 }}
+    <br>
+
+    {% if summary %}
+    <h2>Model Summary</h2>
+    <pre>{{ summary }}</pre>
+    {% endif %}
+
+    {% if proximity_plot %}
+    <h2>Proximity Matrix</h2>
+    <img src="{{ proximity_plot }}" alt="Proximity Matrix Plot" style="max-width: 100%;">
+    {% endif %}
+
+    {% if feature_importances_plot %}
+    <h2>Feature Importances</h2>
+    <img src="{{ feature_importances_plot }}" alt="Feature Importances Plot" style="max-width: 100%;">
+    {% endif %}
+
+    {% if multiple_linear_regression_coefficients %}
+    <h2>Multiple Linear Regression Coefficients</h2>
+    <img src="{{ multiple_linear_regression_coefficients }}" alt="Multiple Linear Regression Coefficients" style="max-width: 100%;">
+    {% endif %}
+
+    {% if ridge_regression_coefficients %}
+    <h2>Ridge Regression Coefficients</h2>
+    <img src="{{ ridge_regression_coefficients }}" alt="Ridge Regression Coefficients" style="max-width: 100%;">
+    {% endif %}
+
+    {% if lasso_regression_coefficients %}
+    <h2>Lasso Regression Coefficients</h2>
+    <img src="{{ lasso_regression_coefficients }}" alt="Lasso Regression Coefficients" style="max-width: 100%;">
+    {% endif %}
+
+    {% if alpha_plot %}
+    <h2>Alpha Value Selection Plot</h2>
+    <img src="{{ alpha_plot }}" alt="Alpha Value Selection Plot" style="max-width: 100%;">
+    {% endif %}
+
+    {% if residual_plot %}
+    <h2>Residual Plot</h2>
+    <img src="{{ residual_plot }}" alt="Residual Plot" style="max-width: 100%;">
+    {% endif %}
+
+    {{ data_var|safe }}
+    </body>
+</html>

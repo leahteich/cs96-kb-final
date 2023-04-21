@@ -1,0 +1,22 @@
+
+{% extends "layout.html" %}
+        {% block content %}
+        <p> Run <strong> {{name}} model</strong> by uploading a file with columns for [DISTRICT, SUBDISTRICT, HEALTH_OUTCOME]
+        {% set this_action = "/" + name %}
+
+        <form method = "POST" enctype="multipart/form-data" action = {{this_action}}>   
+          <input type="file" type="submit" value="Upload" name="file" accept=".csv">
+	      <input type = "submit" value="Run Model"> 
+        </form>
+        <p style="color:blue;">Choose csv file to upload</p>
+        
+
+	<!--<form method = "POST" action = "/decisiontree">   
+            <input type = "submit" value="Decision Tree Model"> 
+        </form>
+
+        <form method = "POST" action = "/mgwr">   
+            <input type = "submit" value="MGWR Model"> 
+        </form>-->
+ 
+        {% endblock %}
