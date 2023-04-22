@@ -20,6 +20,8 @@ from geopandas import GeoDataFrame
 from shapely.geometry import Polygon
 import os
 import seaborn as sns
+from scipy.stats import t
+
 
 class Model: 
     def __init__(self, outcome, geo=False): 
@@ -139,14 +141,87 @@ class MGWRModel(Model):
         self.merged['Y'] = self.merged['centroids'].y 
         u, v = self.merged['X'], self.merged['Y']
         coords = list(zip(u, v))
-
+        
+        self.variables = self.X.columns.tolist()
         mgwr_selector = Sel_BW(coords, Zy, ZX, multi=True)
         mgwr_bw = mgwr_selector.search()
         self.model = MGWR(coords, Zy, ZX, mgwr_selector)
+        self.gdf = gpd.read_file('/Users/dandan/Downloads/SUBDISTRICT_11/Rajasthan_Blocks.shp')
+
+    def mgwr_coefficient_plot(self,coefficients):
+        coefficients_df = pd.DataFrame(coefficients[:,1:], index=self.merged.index, columns=self.X.columns)
+        merged_gdf = pd.merge(coefficients_df, self.gdf, left_index=True, right_index=True)
+        merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry='geometry')
+
+        fig, axes = plt.subplots(int(np.ceil(len(self.variables) / 3)), ncols=3, figsize=(18,6))
+
+        for i, var in enumerate(self.variables):
+            row, col = divmod(i, 3)
+            ax = axes[row, col]
+            merged_gdf.plot(column=var, cmap='coolwarm', linewidth=0.05, scheme='FisherJenks', k=7, legend=True, legend_kwds={'bbox_to_anchor': (1.10, 0.96)}, ax=ax)
+            ax.set_title(f'{var} plot', fontsize=12)
+            ax.set_axis_off()
+        
+        plt.tight_layout()
+        file_path='static/plots/coefficient_plot.png'
+        fig.savefig(file_path)
+        plt.close()
+        return file_path
+
+    def mgwr_pvalue_plot(self, coefficients, std_errors):
+        t_values = coefficients / std_errors
+        n = self.X.shape[0]
+        p_values = np.array([[2 * (1 - t.cdf(abs(t_val), n - 2)) for t_val in t_val_row] for t_val_row in t_values])
+        p_values_df = pd.DataFrame(p_values[:,1:], index=self.merged.index, columns=self.X.columns)
+
+        merged_gdf = pd.merge(p_values_df, self.gdf, left_index=True, right_index=True)
+        merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry='geometry')
+
+
+        fig, axes = plt.subplots(int(np.ceil(len(self.variables) / 3)), ncols=3, figsize=(18,6))
+
+        for i, var in enumerate(self.variables):
+            row, col = divmod(i, 3)
+            ax = axes[row, col]
+            merged_gdf.plot(column=var, cmap='coolwarm', linewidth=0.05, scheme='FisherJenks', k=7, legend=True, legend_kwds={'bbox_to_anchor': (1.10, 0.96)}, ax=ax)
+            ax.set_title(f'{var} plot', fontsize=12)
+            ax.set_axis_off()
+        
+        plt.tight_layout()
+        file_path='static/plots/p_value_plot.png'
+        fig.savefig(file_path)
+        plt.close()
+        return file_path
+
+        
+    # def mgwr_r2_plot(self, models.R2):
+    #     r2 = pd.DataFrame(R2, index=self.merged.index, columns=self.X.columns)
+
+    #     merged_gdf = pd.merge(p_values_df, self.gdf, left_index=True, right_index=True)
+    #     merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry='geometry')
+
+    #     fig, axes = plt.subplots(int(np.ceil(len(variables) / 3)), ncols=3, figsize=(18,6))
+
+    #     for i, var in enumerate(self.X.columns):
+    #         row, col = divmod(i, 3)
+    #         ax = axes[row, col]
+    #         merged_gdf.plot(column=var, cmap='coolwarm', linewidth=0.05, scheme='FisherJenks', k=7, legend=True, legend_kwds={'bbox_to_anchor': (1.10, 0.96)}, ax=ax)
+    #         ax.set_title(f'{var} plot', fontsize=12)
+    #         ax.set_axis_off()
+        
+    #     plt.tight_layout()
+    #     file_path='static/plots/local_r2_plot.png'
+    #     fig.savefig(file_path)
+    #     plt.close()
+    #     return file_path
 
     def run(self): 
-        result = self.model.fit()
-        return result.summary()
+        model = self.model.fit()
+        mgwr_coefficient_plot = self.mgwr_coefficient_plot(model.params)
+        mgwr_pvalue_plot = self.mgwr_pvalue_plot(model.params, model.bse)
+        # mgwr_r2_plot = self.mgwr_r2_plot(model.R2)
+        return mgwr_coefficient_plot, mgwr_pvalue_plot
+
     
 # Multiple linear regression class that returns R^2 score and a plot of coefficients
 class MultipleLinearRegression(Model):
