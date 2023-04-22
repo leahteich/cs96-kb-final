@@ -208,6 +208,38 @@ def runLasso():
 
   return render_template("model.html",name="lassoregression")
 
+@app.route('/decisiontree', methods=['GET', 'POST'])
+def runDecisionTree():
+  if request.method == 'POST':
+    # upload file flask
+    f = request.files.get('file')
+
+    # Extracting uploaded file name
+    data_filename = secure_filename(f.filename)
+
+    f.save(os.path.join(app.config['UPLOAD_FOLDER'],
+                        data_filename))
+
+    session['uploaded_data_file_path'] = os.path.join(app.config['UPLOAD_FOLDER'], data_filename)
+    # Uploaded File Path
+    data_file_path = session.get('uploaded_data_file_path', None)
+    # read csv
+    uploaded_df = pd.read_csv(data_file_path,
+                            encoding='unicode_escape')
+    
+    # Converting to html Table
+    uploaded_df_html = uploaded_df.to_html()
+    # merged df
+    outcome = pd.read_csv(data_file_path)
+    
+    # X is all the features and y is the output from the csv that user input
+    dt_model = models.DecisionTreeModel(outcome)
+    r2, feature_importances_plot = dt_model.run()
+    return render_template('show.html', data_var=uploaded_df_html, r2=r2, feature_importances_plot=feature_importances_plot)
+    # return render_template('show.html', data_var=uploaded_df_html, r2=r2, proximity_plot=proximity_plot_path, feature_importances_plot=feature_importances_plot_path)
+  return render_template("model.html",name="decisiontree")
+
  
 if __name__ == '__main__':
     app.run(debug=True)
+

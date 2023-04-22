@@ -4,6 +4,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import LassoCV
 from sklearn.linear_model import RidgeCV
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
 import statsmodels.api as sm
 import numpy as np
 import pandas as pd
@@ -296,3 +297,37 @@ class LassoRegression(Model):
         alpha_plot_path = self.save_alpha_plot()
         res_plot_path = self.save_residual_plot()
         return r2, coef_plot_path, alpha_plot_path, res_plot_path
+
+class DecisionTreeModel(Model): 
+    def __init__(self, outcome, geo=False): 
+        super().__init__(outcome, geo)
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.3, random_state=0)
+        self.model = DecisionTreeRegressor(criterion="friedman_mse", max_depth=5, random_state=10)
+        self.plot_dir = 'static/plots'
+
+        if not os.path.exists(self.plot_dir):
+            os.makedirs(self.plot_dir)
+
+    def save_feature_importances_plot(self):
+
+        importances = self.model.feature_importances_
+        indices = np.argsort(importances)
+        features = self.X.columns
+        
+        plt.figure(figsize=(7, 5))
+        plt.barh(range(len(indices)), importances[indices], align='center')
+        plt.yticks(range(len(indices)), [features[i] for i in indices])
+        plt.xlabel('Relative Importance')
+        plt.title('Feature Importances')
+        
+        plot_path = os.path.join(self.plot_dir, 'feature_importances.png')
+        plt.savefig(plot_path)
+        plt.close()
+        return plot_path
+
+    def run(self):
+        self.model.fit(self.X_train, self.y_train)
+        y_pred = self.model.predict(self.X_test)
+        r2 = r2_score(self.y_test, y_pred)
+        feature_importances_plot = self.save_feature_importances_plot()
+        return r2, feature_importances_plot
