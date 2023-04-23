@@ -167,9 +167,31 @@ class MGWRModel(Model):
         fig.savefig(file_path)
         plt.close()
         return file_path
+    
+    # def mgwr_pvalue_plot(self, mgwr_results):
+    #     print(mgwr_results.pvalues)
+    #     p_values_df = pd.DataFrame(mgwr_results.pvalues, index=self.merged.index, columns=self.X.columns)
+    #     merged_gdf = pd.merge(p_values_df, self.gdf, left_index=True, right_index=True)
+    #     merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry='geometry')
+
+    #     fig, axes = plt.subplots(int(np.ceil(len(self.variables) / 3)), ncols=3, figsize=(18,6))
+
+    #     for i, var in enumerate(self.variables):
+    #         row, col = divmod(i, 3)
+    #         ax = axes[row, col]
+    #         merged_gdf.plot(column=var, cmap='coolwarm', linewidth=0.05, scheme='FisherJenks', k=7, legend=True, legend_kwds={'bbox_to_anchor': (1.10, 0.96)}, ax=ax)
+    #         ax.set_title(f'{var} plot', fontsize=12)
+    #         ax.set_axis_off()
+        
+    #     plt.tight_layout()
+    #     file_path='static/plots/p_value_plot.png'
+    #     fig.savefig(file_path)
+    #     plt.close()
+    #     return file_path
+
 
     # this is currently t-value plot as kb requested
-    def mgwr_pvalue_plot(self, mgwr_results, coefficients):
+    def mgwr_coefft_plot(self, mgwr_results, coefficients):
         coefficients_df = pd.DataFrame(coefficients[:,1:], index=self.merged.index, columns=self.X.columns)
         merged_gdf = pd.merge(coefficients_df, self.gdf, left_index=True, right_index=True)
         merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry='geometry')
@@ -191,7 +213,7 @@ class MGWRModel(Model):
             ax.set_axis_off()
         
         plt.tight_layout()
-        file_path='static/plots/p_value_plot.png'
+        file_path='static/plots/filetered_coefficient.png'
         fig.savefig(file_path)
         plt.close()
         return file_path
@@ -206,6 +228,7 @@ class MGWRModel(Model):
         ax.axis("off")
         #plt.savefig('myMap.png',dpi=150, bbox_inches='tight')
         plt.show()
+    
 
     # def mgwr_r2_plot(self, models.R2):
     #     r2 = pd.DataFrame(R2, index=self.merged.index, columns=self.X.columns)
@@ -230,11 +253,15 @@ class MGWRModel(Model):
 
     def run(self): 
         model = self.model.fit()
+        summary = model.summary()
         mgwr_coefficient_plot = self.mgwr_coefficient_plot(model.params)
-        mgwr_pvalue_plot = self.mgwr_pvalue_plot(model,model.params)
+        # mgwr_pvalue_plot = self.mgwr_pvalue_plot(model)
+        mgwr_coefft_plot = self.mgwr_coefft_plot(model, model.params)
+        # mgwr_localr_plot = self.mgwr_localr_plot(model)
+        
         # mgwr_multicollinearity_test = self.mgwr_multicollinearity_test(model)
         # mgwr_r2_plot = self.mgwr_r2_plot(model.R2)
-        return mgwr_coefficient_plot, mgwr_pvalue_plot
+        return mgwr_coefficient_plot, mgwr_coefft_plot,summary
 
     
 # Multiple linear regression class that returns R^2 score and a plot of coefficients

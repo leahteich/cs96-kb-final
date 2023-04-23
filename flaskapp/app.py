@@ -71,10 +71,15 @@ def runMGWR():
     
     # X is all the features and y is the output from the csv that user input
     model = models.MGWRModel(outcome)
-    mgwr_coefficient_plot,mgwr_pvalue_plot = model.run()
+    mgwr_coefficient_plot, mgwr_coefft_plot, summary = model.run()
+    print("sum", summary)
     return render_template('show.html',
-                        data_var=uploaded_df_html, coefficient_plot=mgwr_coefficient_plot,p_value_plot=mgwr_pvalue_plot)
+                       data_var=uploaded_df_html,
+                       coefficient_plot=mgwr_coefficient_plot,
+                       mgwr_coefft_plot=mgwr_coefft_plot,
+                       summar=summary)
 
+    
   return render_template("model.html",name="mgwr")
 
 @app.route('/randomforest', methods=['GET', 'POST'])
