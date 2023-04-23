@@ -71,10 +71,15 @@ def runMGWR():
     
     # X is all the features and y is the output from the csv that user input
     model = models.MGWRModel(outcome)
-    r2 = model.run()
+    mgwr_coefficient_plot, mgwr_coefft_plot, summary = model.run()
+    print("sum", summary)
     return render_template('show.html',
-                        data_var=uploaded_df_html, r2=r2)
+                       data_var=uploaded_df_html,
+                       coefficient_plot=mgwr_coefficient_plot,
+                       mgwr_coefft_plot=mgwr_coefft_plot,
+                       summar=summary)
 
+    
   return render_template("model.html",name="mgwr")
 
 @app.route('/randomforest', methods=['GET', 'POST'])
@@ -103,7 +108,7 @@ def runRandomForestTree():
     
     # X is all the features and y is the output from the csv that user input
     model = models.RandomForestModel(outcome)
-    r2, proximity_plot_path, feature_importances_plot_path = model.run()
+    r2,proximity_plot_path, feature_importances_plot_path = model.run()
     return render_template('show.html', data_var=uploaded_df_html, r2=r2, proximity_plot=proximity_plot_path, feature_importances_plot=feature_importances_plot_path)
 
   return render_template("model.html",name="randomforest")

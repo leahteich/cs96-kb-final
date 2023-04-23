@@ -8,9 +8,11 @@
   </head>
   <body>
     <h1> Output File </h1>
-    <p> r^2 value is {{ r2 }}
-    <br>
-
+    {% if r2 %}
+    <h2>r2</h2>
+    <pre>{{ r2 }}</pre>
+    {% endif %}
+    
     {% if summary %}
     <h2>Model Summary</h2>
     <pre>{{ summary }}</pre>
@@ -49,6 +51,21 @@
     {% if residual_plot %}
     <h2>Residual Plot</h2>
     <img src="{{ residual_plot }}" alt="Residual Plot" style="max-width: 100%;">
+    {% endif %}
+
+    {% if coefficient_plot %}
+    <h2>Coefficient Plot</h2>
+    <img src="{{ coefficient_plot }}" alt="Coefficient Plot" style="max-width: 100%;">
+    {% endif %}
+
+    {% if p_value_plot %}
+    <h2>Coefficient Plot With significance</h2>
+    <img src="{{ p_value_plot }}" alt="P_Value Plot" style="max-width: 100%;">
+    {% endif %}
+
+    {% if mgwr_coefft_plot %}
+    <h2>Filtered Coefficient Plot</h2>
+    <img src="{{ mgwr_coefft_plot }}" alt="Filtered Coefficient Plot" style="max-width: 100%;">
     {% endif %}
 
     {{ data_var|safe }}
