@@ -146,7 +146,7 @@ class MGWRModel(Model):
         mgwr_selector = Sel_BW(coords, Zy, ZX, multi=True)
         mgwr_bw = mgwr_selector.search()
         self.model = MGWR(coords, Zy, ZX, mgwr_selector)
-        self.gdf = gpd.read_file('/Users/dandan/Downloads/SUBDISTRICT_11/Rajasthan_Blocks.shp')
+        self.gdf = gpd.read_file('static/shapefiles/Rajasthan_Blocks.shp')
 
     def mgwr_coefficient_plot(self,coefficients):
         coefficients_df = pd.DataFrame(coefficients[:,1:], index=self.merged.index, columns=self.X.columns)
@@ -220,10 +220,10 @@ class MGWRModel(Model):
     
     def mgwr_multicollinearity_test(self,mgwr_results):
         mgwrCN, mgwrVDP = mgwr_results.local_collinearity()
-        gdf['mgwr_CN'] = mgwrCN
+        self.gdf['mgwr_CN'] = mgwrCN
 
         fig, ax = plt.subplots(figsize=(6, 6))
-        gdf.plot(column='mgwr_CN', cmap = 'coolwarm', linewidth=0.01, scheme = 'FisherJenks', k=5, legend=True, legend_kwds={'bbox_to_anchor':(1.10, 0.96)},  ax=ax)
+        self.gdf.plot(column='mgwr_CN', cmap = 'coolwarm', linewidth=0.01, scheme = 'FisherJenks', k=5, legend=True, legend_kwds={'bbox_to_anchor':(1.10, 0.96)},  ax=ax)
         ax.set_title('Local multicollinearity (CN > 30)?', fontsize=12)
         ax.axis("off")
         #plt.savefig('myMap.png',dpi=150, bbox_inches='tight')
