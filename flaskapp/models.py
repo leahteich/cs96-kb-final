@@ -21,6 +21,7 @@ from shapely.geometry import Polygon
 import os
 import seaborn as sns
 from scipy.stats import t
+import time
 
 
 class Model: 
@@ -99,7 +100,7 @@ class RandomForestModel(Model):
         plt.figure(figsize=(7, 5))
         sns.heatmap(prox_mat, cmap='viridis')
         plt.title("Proximity Matrix Heatmap")
-        plot_path = os.path.join(self.plot_dir, 'proximity_matrix.png')
+        plot_path = os.path.join(self.plot_dir, f'proximity_matrix_{int(time.time())}.png')
         plt.savefig(plot_path)
         plt.close()
         return plot_path
@@ -115,7 +116,7 @@ class RandomForestModel(Model):
         ax.set_ylabel("Mean decrease in impurity")
         fig.tight_layout()
 
-        plot_path = os.path.join(self.plot_dir, 'feature_importances.png')
+        plot_path = os.path.join(self.plot_dir, f'feature_importances_{int(time.time())}.png')
         plt.savefig(plot_path)
         plt.close()
         return plot_path
@@ -163,7 +164,7 @@ class MGWRModel(Model):
             ax.set_axis_off()
         
         plt.tight_layout()
-        file_path='static/plots/coefficient_plot.png'
+        file_path=f'static/plots/coefficient_plot_{int(time.time())}.png'
         fig.savefig(file_path)
         plt.close()
         return file_path
@@ -213,7 +214,7 @@ class MGWRModel(Model):
             ax.set_axis_off()
         
         plt.tight_layout()
-        file_path='static/plots/filetered_coefficient.png'
+        file_path=f'static/plots/filetered_coefficient_{int(time.time())}.png'
         fig.savefig(file_path)
         plt.close()
         return file_path
@@ -282,7 +283,7 @@ class MultipleLinearRegression(Model):
         plt.xticks(rotation=90)
         plt.margins(0.2)
         plt.subplots_adjust(bottom=0.25)
-        fig_path = 'static/plots/multiple_linear_regression_coefficients.png'
+        fig_path = f'static/plots/multiple_linear_regression_coefficients_{int(time.time())}.png'
         fig.savefig(fig_path)
         plt.close()
         return fig_path
@@ -295,7 +296,7 @@ class MultipleLinearRegression(Model):
         plt.xlabel("Predicted Values")
         plt.ylabel("Residuals")
         plt.title("Residual Plot")
-        fig_path = 'static/plots/residual_plot.png'
+        fig_path = f'static/plots/residual_plot_{int(time.time())}.png'
         fig.savefig(fig_path)
         plt.close()
         return fig_path
@@ -323,7 +324,7 @@ class RidgeRegression(Model):
         plt.xticks(rotation=90)
         plt.margins(0.2)
         plt.subplots_adjust(bottom=0.25)
-        fig_path = 'static/plots/ridge_regression_coefficients.png'
+        fig_path = f'static/plots/ridge_regression_coefficients_{int(time.time())}.png'
         fig.savefig(fig_path)
         plt.close()
         return fig_path
@@ -336,7 +337,7 @@ class RidgeRegression(Model):
         plt.xlabel("Alpha Value")
         plt.ylabel("Mean Squared Error")
         plt.title("Ridge Regression - Alpha Value Selection")
-        fig_path = 'static/plots/ridge_alpha_selection.png'
+        fig_path = f'static/plots/ridge_alpha_selection_{int(time.time())}.png'
         fig.savefig(fig_path)
         plt.close()
         return fig_path
@@ -349,7 +350,7 @@ class RidgeRegression(Model):
         plt.xlabel("Predicted Values")
         plt.ylabel("Residuals")
         plt.title("Residual Plot")
-        fig_path = 'static/plots/residual_plot.png'
+        fig_path = f'static/plots/residual_plot_{int(time.time())}.png'
         fig.savefig(fig_path)
         plt.close()
         return fig_path
@@ -376,7 +377,7 @@ class LassoRegression(Model):
         plt.xticks(rotation=90)
         plt.margins(0.2)
         plt.subplots_adjust(bottom=0.25)
-        fig_path = 'static/plots/lasso_regression_coefficients.png'
+        fig_path = f'static/plots/lasso_regression_coefficients_{int(time.time())}.png'
         fig.savefig(fig_path)
         plt.close()
         return fig_path
@@ -389,7 +390,7 @@ class LassoRegression(Model):
         plt.xlabel("Alpha Value")
         plt.ylabel("Mean Squared Error")
         plt.title("Lasso Regression - Alpha Value Selection")
-        fig_path = 'static/plots/lasso_alpha_selection.png'
+        fig_path = f'static/plots/lasso_alpha_selection_{int(time.time())}.png'
         fig.savefig(fig_path)
         plt.close()
         return fig_path
@@ -402,7 +403,7 @@ class LassoRegression(Model):
         plt.xlabel("Predicted Values")
         plt.ylabel("Residuals")
         plt.title("Residual Plot")
-        fig_path = 'static/plots/residual_plot.png'
+        fig_path = f'static/plots/residual_plot_{int(time.time())}.png'
         fig.savefig(fig_path)
         plt.close()
         return fig_path
@@ -436,8 +437,8 @@ class DecisionTreeModel(Model):
         plt.yticks(range(len(indices)), [features[i] for i in indices])
         plt.xlabel('Relative Importance')
         plt.title('Feature Importances')
-        
-        plot_path = os.path.join(self.plot_dir, 'feature_importances.png')
+        plt.subplots_adjust(left=0.25)
+        plot_path = os.path.join(self.plot_dir, f'feature_importances_{int(time.time())}.png')
         plt.savefig(plot_path)
         plt.close()
         return plot_path
