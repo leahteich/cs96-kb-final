@@ -21,6 +21,7 @@ from shapely.geometry import Polygon
 import os
 import seaborn as sns
 from scipy.stats import t
+import time
 
 
 class Model: 
@@ -153,17 +154,18 @@ class MGWRModel(Model):
         merged_gdf = pd.merge(coefficients_df, self.gdf, left_index=True, right_index=True)
         merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry='geometry')
 
-        fig, axes = plt.subplots(int(np.ceil(len(self.variables) / 3)), ncols=3, figsize=(18,6))
+ 
+        fig, axes = plt.subplots(int(np.ceil(len(self.variables) / 3)), ncols=3, figsize=(12,8))
 
         for i, var in enumerate(self.variables):
             row, col = divmod(i, 3)
             ax = axes[row, col]
-            merged_gdf.plot(column=var, cmap='coolwarm', linewidth=0.05, scheme='FisherJenks', k=7, legend=True, legend_kwds={'bbox_to_anchor': (1.10, 0.96)}, ax=ax)
+            merged_gdf.plot(column=var, cmap='coolwarm', linewidth=0.05, scheme='FisherJenks', k=5, legend=True, legend_kwds={'fontsize': 8, 'bbox_to_anchor': (1.01, 1.01)}, ax=ax)
             ax.set_title(f'{var} plot', fontsize=12)
             ax.set_axis_off()
         
         plt.tight_layout()
-        file_path='static/plots/coefficient_plot.png'
+        file_path=f'static/plots/coefficient_plot_{int(time.time())}.png'
         fig.savefig(file_path)
         plt.close()
         return file_path
@@ -201,19 +203,18 @@ class MGWRModel(Model):
         # p_values = np.array([[2 * (1 - t.cdf(abs(t_val), n - 2)) for t_val in t_val_row] for t_val_row in t_values])
         mgwr_filtered_series = pd.DataFrame(mgwr_filtered_t[:, 1])
 
-        fig, axes = plt.subplots(int(np.ceil(len(self.variables) / 3)), ncols=3, figsize=(18,6))
+        fig, axes = plt.subplots(int(np.ceil(len(self.variables) / 3)), ncols=3, figsize=(12,8))
 
         for i, var in enumerate(self.variables):
             row, col = divmod(i, 3)
             ax = axes[row, col]
-            merged_gdf.plot(column=var, cmap='coolwarm', linewidth=0.05, scheme='FisherJenks', k=5, legend=True, legend_kwds={'bbox_to_anchor': (1.10, 0.96)}, ax=ax)
+            merged_gdf.plot(column=var, cmap='coolwarm', linewidth=0.05, scheme='FisherJenks', k=5, legend=True, legend_kwds={'fontsize': 8, 'bbox_to_anchor': (1.01, 1.01)}, ax=ax)
             merged_gdf[mgwr_filtered_t[:,1] == 0].plot(color='white', linewidth=0.05, edgecolor='black', ax=ax)
-            
             ax.set_title(f'{var} plot', fontsize=12)
             ax.set_axis_off()
         
         plt.tight_layout()
-        file_path='static/plots/filetered_coefficient.png'
+        file_path=f'static/plots/filetered_coefficient.png'
         fig.savefig(file_path)
         plt.close()
         return file_path
@@ -418,8 +419,8 @@ class LassoRegression(Model):
 class DecisionTreeModel(Model): 
     def __init__(self, outcome, geo=False): 
         super().__init__(outcome, geo)
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.3, random_state=0)
-        self.model = DecisionTreeRegressor(criterion="friedman_mse", max_depth=5, random_state=10)
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.2, random_state=42)
+        self.model = DecisionTreeRegressor(criterion="friedman_mse", max_depth=5, random_state=42)
         self.plot_dir = 'static/plots'
 
         if not os.path.exists(self.plot_dir):
